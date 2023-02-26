@@ -25,6 +25,7 @@ jobs:
         
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
     - run: cd ~/actions-runner/deploy/transporterApi/transporterApi/TransporterAPI
     - run: sudo cp /home/ubuntu/envDev.properties /home/ubuntu/actions-runner/deploy/transporterApi/transporterApi/TransporterAPI/target/
     - run: sudo docker container stop transporter-container || true
