@@ -19,7 +19,7 @@ public class FirebaseConfig {
 
         FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(refreshToken))
-                    .setDatabaseUrl("https://liveasytransporterapp-default-rtdb.firebaseio.com")
+                    .setDatabaseUrl("https://shipperwebapp-default-rtdb.asia-southeast1.firebasedatabase.app")
                     .build();
 
         FirebaseApp.initializeApp(options);
