@@ -16,7 +16,8 @@ public class FirebaseController {
 
     @GetMapping("/phoneNo/{number}")
     public String getUserByPhoneNO(@PathVariable String number) throws InterruptedException, ExecutionException, FirebaseAuthException {
-        return service.getByPhoneno(number);
+       //returning uid as a response       
+       return service.getByPhoneno(number);
     }
 
 }
