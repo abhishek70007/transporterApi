@@ -13,11 +13,19 @@ public class FirebaseController {
 
     @Autowired
     public Service service;
-
-    @GetMapping("/phoneNo/{number}")
-    public String getUserByPhoneNO(@PathVariable String number) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    
+    //get uid from email
+    @GetMapping("/email/{email}")
+    public String getUserByEmail(@PathVariable String email) throws InterruptedException, ExecutionException, FirebaseAuthException {
        //returning uid as a response       
-       return service.getByPhoneno(number);
+       return service.getByEmail(email);
+    }
+    
+    //get uid from phoneno
+    @GetMapping("/phoneNo/{phoneno}")
+    public String getUserByPhoneno(@PathVariable String phoneno) throws InterruptedException, ExecutionException, FirebaseAuthException {
+       //returning uid as a response       
+       return service.getByPhoneno(phoneno);
     }
 
 }
