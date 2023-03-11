@@ -29,16 +29,15 @@ jobs:
         aws-access-key-id: ''
         aws-secret-access-key: ''
         aws-region: 'ap-south-1'
+    - run: sudo docker container stop transporter-container || true
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - run: cd ~/actions-runner/deploy/transporterApi/transporterApi/TransporterAPI
     - run: sudo cp /home/ubuntu/envProd.properties /home/ubuntu/actions-runner/deploy/transporterApi/transporterApi/TransporterAPI/target/
-    - run: sudo docker container stop transporter-container || true
     - run: sudo docker container stop transporterPostgres || true
     - run: sudo docker container rm transporter-container|| true
     - run: sudo docker image rm transporter || true
     - run: sudo docker build -t transporter .
-    - run:  sudo docker container start transporterPostgres || sudo docker run --name transporterPostgres -e POSTGRES_ROOT_PASSWORD=postgres -e POSTGRES_DATABASE=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:alpine
     - run: sudo docker run --env-file /home/ubuntu/test.env -p 9090:9090 --name transporter-container --link transporterPostgres:postgres transporter | echo "success" 
 
  
