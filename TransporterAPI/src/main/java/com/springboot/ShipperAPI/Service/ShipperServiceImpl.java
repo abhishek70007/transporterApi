@@ -45,10 +45,12 @@ public class ShipperServiceImpl implements ShipperService {
 		Shipper shipper = new Shipper();
 		ShipperCreateResponse response = new ShipperCreateResponse();
 
-		Optional<Shipper> s = shipperdao.findShipperByPhoneNo(postshipper.getPhoneNo());
+		//Optional<Shipper> s = shipperdao.findShipperByPhoneNo(postshipper.getPhoneNo());
+		Optional<Shipper> s = shipperdao.findByEmailId(postshipper.getEmailId());
 		if (s.isPresent()) {
 			response.setShipperId(s.get().getShipperId());
 			response.setPhoneNo(s.get().getPhoneNo());
+			response.setEmailId(s.get().getEmailId());
 			response.setShipperName(s.get().getShipperName());
 			response.setShipperLocation(s.get().getShipperLocation());
 			response.setCompanyName(s.get().getCompanyName());
@@ -86,6 +88,10 @@ public class ShipperServiceImpl implements ShipperService {
 		shipper.setPhoneNo(temp);
 		response.setPhoneNo(temp);
 
+		temp=postshipper.getEmailId();
+		shipper.setEmailId(temp);
+		response.setEmailId(temp);
+
 		temp=postshipper.getKyc();
 		if(StringUtils.isNotBlank(temp)) {
 			shipper.setKyc(temp.trim());
@@ -112,7 +118,7 @@ public class ShipperServiceImpl implements ShipperService {
 
 	@Transactional(readOnly = true, rollbackFor = Exception.class)
 	@Override
-	public List<Shipper> getShippers(Boolean companyApproved, String phoneNo, Integer pageNo) { 
+	public List<Shipper> getShippers(Boolean companyApproved, String phoneNo, String emailId, Integer pageNo) {
 		log.info("getShippers service started");
 		if(pageNo == null) {
 			pageNo = 0;
@@ -137,6 +143,24 @@ public class ShipperServiceImpl implements ShipperService {
 				throw new BusinessException("Invalid mobile number");
 			}
 			
+		}
+
+		if(emailId != null){
+			String validate = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
+			Pattern pattern = Pattern.compile(validate);
+			Matcher m = pattern.matcher(emailId);
+			if(m.matches()){
+				if(shipperdao.findByEmailId(emailId).isPresent()) {
+					List<Shipper> list = List.of(shipperdao.findByEmailId(emailId).get());
+					return list;
+				}
+				else {
+					throw new EntityNotFoundException(Shipper.class, "emailId", emailId.toString());
+				}
+			}
+			else{
+				throw new BusinessException("Invalid email Id");
+			}
 		}
 
 		if(companyApproved == null) {
@@ -181,6 +205,9 @@ public class ShipperServiceImpl implements ShipperService {
 		if (updateShipper.getPhoneNo() != null) {			
 			throw new BusinessException("Phone no. can't be updated");
 		}
+		if(updateShipper.getEmailId() != null){
+			throw new BusinessException("Email Id can't be updated");
+		}
 
 		temp=updateShipper.getShipperName();
 		if(StringUtils.isNotBlank(temp)) {
@@ -214,6 +241,7 @@ public class ShipperServiceImpl implements ShipperService {
 
 		updateResponse.setShipperId(shipper.getShipperId());
 		updateResponse.setPhoneNo(shipper.getPhoneNo());
+		updateResponse.setEmailId(shipper.getEmailId());
 		updateResponse.setShipperName(shipper.getShipperName());
 		updateResponse.setCompanyName(shipper.getCompanyName());
 		updateResponse.setShipperLocation(shipper.getShipperLocation());
