@@ -9,12 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateShipper {
 	private String phoneNo;
-	private String emailId;
 	private String shipperName;
 	private String companyName;
 	private String kyc;
-	private String gst;
-	private String companyStatus;
 	private String shipperLocation;
 	private Boolean companyApproved;
 	private Boolean accountVerificationInProgress;
