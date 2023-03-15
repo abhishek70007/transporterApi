@@ -10,10 +10,7 @@ import com.springboot.ShipperAPI.Entity.Shipper;
 
 public interface ShipperDao extends JpaRepository<Shipper, String> {
 	@Query("select phoneNo from Shipper s where s.phoneNo = :phoneNo")
-	public Long findByPhoneNo(String phoneNo);
-
-	@Query("select s from Shipper s where s.emailId = :emailId")
-	public Optional<Shipper> findByEmailId(String emailId);
+	public Long findByPhoneNo(String phoneNo);	
 
 	@Query("select s from Shipper s where s.phoneNo = :phoneNo")
 	public Optional<Shipper> findShipperByPhoneNo(String phoneNo);	
