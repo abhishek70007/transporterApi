@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -25,11 +26,18 @@ public class Shipper {
 	private String shipperId;
 	private String shipperName;
 	private String companyName;
-	@Column(unique=true)
-	@NotBlank(message = "Phone no. cannot be blank!")
+	//@Column(unique=true)
+	//@NotBlank(message = "Phone no. cannot be blank!")
 	//	"^[6-9]\\d{9}$", "(^$|[0-9]{10})"
-	@Pattern(regexp="(^[6-9]\\d{9}$)", message="Please enter a valid mobile number") 
+	@Pattern(regexp="(^[6-9]\\d{9}$)", message="Please enter a valid mobile number")
 	private String phoneNo;
+	@Column(unique=true)
+	@NotBlank(message = "Email can not be blank!")
+	@Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+			flags = Pattern.Flag.CASE_INSENSITIVE, message = "Please enter a valid email")
+	private String emailId;
+	private String gst;
+	private String companyStatus;
 	private String kyc;
 	private String shipperLocation;
 
