@@ -19,10 +19,7 @@ public class ShipperCreateResponse {
 	private String shipperName;
 	private String companyName;
 	private String phoneNo;
-	private String emailId;
 	private String kyc;
-	private String gst;
-	private String companyStatus;
 	private String shipperLocation;
 	private boolean companyApproved;
 	private boolean accountVerificationInProgress;
