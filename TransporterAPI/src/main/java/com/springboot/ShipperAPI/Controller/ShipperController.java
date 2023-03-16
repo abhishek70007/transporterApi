@@ -40,9 +40,10 @@ public class ShipperController {
 	public ResponseEntity<List<Shipper>> getShippers(
 			@RequestParam(required = false) Boolean companyApproved,
 			@RequestParam(required = false) String phoneNo,
+			@RequestParam(required = false) String emailId,
 			@RequestParam(required = false) Integer pageNo) {
 		log.info("Get with Params Controller Started");
-		return new ResponseEntity<>(service.getShippers(companyApproved, phoneNo, pageNo),HttpStatus.OK);
+		return new ResponseEntity<>(service.getShippers(companyApproved, phoneNo, emailId, pageNo),HttpStatus.OK);
 
 	}
 
