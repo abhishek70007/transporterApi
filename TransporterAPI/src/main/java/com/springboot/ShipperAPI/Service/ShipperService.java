@@ -14,7 +14,7 @@ public interface ShipperService {
 
 	public ShipperCreateResponse addShipper(PostShipper shipper);
 
-	public List<Shipper> getShippers(Boolean companyApproved, String phoneNo, String emailId, Integer pageNo);
+	public List<Shipper> getShippers(Boolean companyApproved, String phoneNo, Integer pageNo);
 
 	public Shipper getOneShipper(String shipperId);
 
