@@ -45,14 +45,18 @@ public class ShipperServiceImpl implements ShipperService {
 		Shipper shipper = new Shipper();
 		ShipperCreateResponse response = new ShipperCreateResponse();
 
-		Optional<Shipper> s = shipperdao.findShipperByPhoneNo(postshipper.getPhoneNo());
+		//Optional<Shipper> s = shipperdao.findShipperByPhoneNo(postshipper.getPhoneNo());
+		Optional<Shipper> s = shipperdao.findByEmailId(postshipper.getEmailId());
 		if (s.isPresent()) {
 			response.setShipperId(s.get().getShipperId());
 			response.setPhoneNo(s.get().getPhoneNo());
+			response.setEmailId(s.get().getEmailId());
 			response.setShipperName(s.get().getShipperName());
 			response.setShipperLocation(s.get().getShipperLocation());
 			response.setCompanyName(s.get().getCompanyName());
 			response.setKyc(s.get().getKyc());
+			response.setGst(s.get().getGst());
+			response.setCompanyStatus(s.get().getCompanyStatus());
 			response.setCompanyApproved(s.get().isCompanyApproved());
 			response.setAccountVerificationInProgress(s.get().isAccountVerificationInProgress());
 			response.setMessage(CommonConstants.ACCOUNT_EXIST);
@@ -86,10 +90,25 @@ public class ShipperServiceImpl implements ShipperService {
 		shipper.setPhoneNo(temp);
 		response.setPhoneNo(temp);
 
+		temp=postshipper.getEmailId();
+		shipper.setEmailId(temp);
+		response.setEmailId(temp);
+
+
 		temp=postshipper.getKyc();
 		if(StringUtils.isNotBlank(temp)) {
 			shipper.setKyc(temp.trim());
 			response.setKyc(temp.trim());
+		}
+		temp=postshipper.getGst();
+		if(StringUtils.isNotBlank(temp)){
+			shipper.setGst(temp.trim());
+			response.setGst(temp.trim());
+		}
+		temp=postshipper.getCompanyStatus();
+		if(StringUtils.isNotBlank(temp)){
+			shipper.setCompanyStatus(temp.trim());
+			response.setCompanyStatus(temp.trim());
 		}
 
 		shipper.setCompanyApproved(false);
@@ -112,7 +131,7 @@ public class ShipperServiceImpl implements ShipperService {
 
 	@Transactional(readOnly = true, rollbackFor = Exception.class)
 	@Override
-	public List<Shipper> getShippers(Boolean companyApproved, String phoneNo, Integer pageNo) { 
+	public List<Shipper> getShippers(Boolean companyApproved, String phoneNo,String emailId, Integer pageNo) {
 		log.info("getShippers service started");
 		if(pageNo == null) {
 			pageNo = 0;
@@ -139,6 +158,23 @@ public class ShipperServiceImpl implements ShipperService {
 			
 		}
 
+		if(emailId != null){
+			String validate = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
+			Pattern pattern = Pattern.compile(validate);
+			Matcher m = pattern.matcher(emailId);
+			if(m.matches()){
+				if(shipperdao.findByEmailId(emailId).isPresent()) {
+					List<Shipper> list = List.of(shipperdao.findByEmailId(emailId).get());
+					return list;
+				}
+				else {
+					throw new EntityNotFoundException(Shipper.class, "emailId", emailId.toString());
+				}
+			}
+			else{
+				throw new BusinessException("Invalid email Id");
+			}
+		}
 		if(companyApproved == null) {
 			List<Shipper> shipperList = shipperdao.getAll(page);
 			//Collections.reverse(shipperList);
@@ -181,10 +217,23 @@ public class ShipperServiceImpl implements ShipperService {
 		if (updateShipper.getPhoneNo() != null) {			
 			throw new BusinessException("Phone no. can't be updated");
 		}
+		if(updateShipper.getEmailId() != null){
+			throw new BusinessException("Email Id can't be updated");
+		}
 
 		temp=updateShipper.getShipperName();
 		if(StringUtils.isNotBlank(temp)) {
 			shipper.setShipperName(temp.trim());
+		}
+
+		temp=updateShipper.getGst();
+		if(StringUtils.isNotBlank(temp)){
+			shipper.setGst(temp.trim());
+		}
+
+		temp=updateShipper.getCompanyStatus();
+		if(StringUtils.isNotBlank(temp)){
+			shipper.setCompanyStatus(temp.trim());
 		}
 		
 		temp=updateShipper.getCompanyName();
@@ -214,6 +263,9 @@ public class ShipperServiceImpl implements ShipperService {
 
 		updateResponse.setShipperId(shipper.getShipperId());
 		updateResponse.setPhoneNo(shipper.getPhoneNo());
+		updateResponse.setEmailId(shipper.getEmailId());
+		updateResponse.setGst(shipper.getGst());
+		updateResponse.setCompanyStatus(shipper.getCompanyStatus());
 		updateResponse.setShipperName(shipper.getShipperName());
 		updateResponse.setCompanyName(shipper.getCompanyName());
 		updateResponse.setShipperLocation(shipper.getShipperLocation());
