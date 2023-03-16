@@ -23,12 +23,7 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
         
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ''
-        aws-secret-access-key: ''
-        aws-region: 'ap-south-1'
+
     - run: sudo docker container stop transporter-container || true
     - name: Build with Maven
       run: mvn -B package --file pom.xml
