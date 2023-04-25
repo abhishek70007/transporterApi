@@ -7,14 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springboot.ShipperAPI.Entity.Shipper;
 import com.springboot.ShipperAPI.Model.PostShipper;
@@ -24,6 +17,7 @@ import com.springboot.ShipperAPI.Service.ShipperService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@CrossOrigin
 @RestController
 public class ShipperController {
 
@@ -46,9 +40,10 @@ public class ShipperController {
 	public ResponseEntity<List<Shipper>> getShippers(
 			@RequestParam(required = false) Boolean companyApproved,
 			@RequestParam(required = false) String phoneNo,
+			@RequestParam(required = false) String emailId,
 			@RequestParam(required = false) Integer pageNo) {
 		log.info("Get with Params Controller Started");
-		return new ResponseEntity<>(service.getShippers(companyApproved, phoneNo, pageNo),HttpStatus.OK);
+		return new ResponseEntity<>(service.getShippers(companyApproved, phoneNo, emailId, pageNo),HttpStatus.OK);
 
 	}
 
