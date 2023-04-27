@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Data
 public class Entity {
     private String uid;
     private String email;
