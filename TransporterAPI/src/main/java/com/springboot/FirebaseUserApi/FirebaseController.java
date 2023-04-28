@@ -2,10 +2,13 @@ package com.springboot.FirebaseUserApi;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -16,16 +19,16 @@ public class FirebaseController {
     
     //get uid from email
     @GetMapping("/email/{email}")
-    public String getUserByEmail(@PathVariable String email) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    public ResponseEntity<Entity> getUserByEmail(@PathVariable String email) throws InterruptedException, ExecutionException, FirebaseAuthException {
        //returning uid as a response       
-       return service.getByEmail(email);
+       return new ResponseEntity<>(service.getByEmail(email), HttpStatus.OK);
     }
     
     //get uid from phoneno
-    @GetMapping("/phoneNo/{phoneno}")
-    public String getUserByPhoneno(@PathVariable String phoneno) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    @GetMapping("/phoneNo/{phoneNo}")
+    public ResponseEntity<Entity> getUserByPhoneNo(@PathVariable String phoneNo) throws InterruptedException, ExecutionException, FirebaseAuthException {
        //returning uid as a response       
-       return service.getByPhoneno(phoneno);
+       return new ResponseEntity<>(service.getByPhoneno(phoneNo),HttpStatus.OK);
     }
 
 }

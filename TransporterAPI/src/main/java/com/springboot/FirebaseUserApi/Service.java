@@ -1,23 +1,54 @@
 package com.springboot.FirebaseUserApi;
-
+import java.util.*;
+import com.google.api.services.storage.Storage.BucketAccessControls.List;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
-
+import lombok.extern.slf4j.Slf4j;
 
 
 @org.springframework.stereotype.Service
+@Slf4j
 public class Service {
 
     //getting uid by email
-    public String getByEmail(String email) throws  FirebaseAuthException {
+    public Entity getByEmail(String email) throws  FirebaseAuthException {
         UserRecord userRecord = FirebaseAuth.getInstance().getUserByEmail(email);
-           return userRecord.getUid();
+        if(userRecord==null){
+            EntityNotFoundException ex = new EntityNotFoundException(Entity.class, "email", email);
+            log.error(String.valueOf(ex));
+            throw ex;
+        }
+        Entity response=new Entity();
+        response.setName(userRecord.getDisplayName());
+        response.setEmail((userRecord.getEmail()));
+        response.setUid(userRecord.getUid());
+        response.setPhotoURL(userRecord.getPhotoUrl());
+        response.setPhoneNo(userRecord.getPhoneNumber());
+        response.setProviderId(userRecord.getProviderId());
+        response.setTenantId(userRecord.getTenantId());
+        response.setEmailVerified(userRecord.isEmailVerified());
+        return response;
     }
     
     //getting uid by phone number
-    public String getByPhoneno(String phoneno) throws  FirebaseAuthException {
-        UserRecord userRecord = FirebaseAuth.getInstance().getUserByPhoneNumber(phoneno);
-           return userRecord.getUid();
+    public Entity getByPhoneno(String phoneNo) throws  FirebaseAuthException {
+        UserRecord userRecord = FirebaseAuth.getInstance().getUserByPhoneNumber(phoneNo);
+        if(userRecord==null){
+            EntityNotFoundException ex = new EntityNotFoundException(Entity.class, "phoneNo", phoneNo);
+            log.error(String.valueOf(ex));
+            throw ex;
+        }
+        Entity response=new Entity();
+        response.setName(userRecord.getDisplayName());
+        response.setEmail((userRecord.getEmail()));
+        response.setUid(userRecord.getUid());
+        response.setPhotoURL(userRecord.getPhotoUrl());
+        response.setPhoneNo(userRecord.getPhoneNumber());
+        response.setProviderId(userRecord.getProviderId());
+        response.setTenantId(userRecord.getTenantId());
+        response.setEmailVerified(userRecord.isEmailVerified());
+        response.setEmailVerified(userRecord.isEmailVerified());
+        return response;
     }
 }
