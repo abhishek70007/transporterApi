@@ -51,4 +51,25 @@ public class Service {
         response.setEmailVerified(userRecord.isEmailVerified());
         return response;
     }
+
+//    Getting User by uid
+    public Entity getByUid(String uid) throws FirebaseAuthException {
+        UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
+        if(userRecord==null){
+            EntityNotFoundException ex = new EntityNotFoundException(Entity.class, "uid", uid);
+            log.error(String.valueOf(ex));
+            throw ex;
+        }
+        Entity response=new Entity();
+        response.setName(userRecord.getDisplayName());
+        response.setEmail((userRecord.getEmail()));
+        response.setUid(userRecord.getUid());
+        response.setPhotoURL(userRecord.getPhotoUrl());
+        response.setPhoneNo(userRecord.getPhoneNumber());
+        response.setProviderId(userRecord.getProviderId());
+        response.setTenantId(userRecord.getTenantId());
+        response.setEmailVerified(userRecord.isEmailVerified());
+        response.setEmailVerified(userRecord.isEmailVerified());
+        return response;
+    }
 }

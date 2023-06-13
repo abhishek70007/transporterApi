@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.stream.events.EndElement;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -31,4 +32,8 @@ public class FirebaseController {
        return new ResponseEntity<>(service.getByPhoneno(phoneNo),HttpStatus.OK);
     }
 
+    @GetMapping("/uid/{uid}")
+    public ResponseEntity<Entity> getUserbyUid(@PathVariable String uid) throws FirebaseAuthException {
+        return new ResponseEntity<>(service.getByUid(uid), HttpStatus.OK);
+    }
 }
