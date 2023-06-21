@@ -1,6 +1,5 @@
 package com.springboot.TransporterAPI.Services;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,17 +7,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
 import com.springboot.TransporterAPI.Exception.BusinessException;
 import com.springboot.TransporterAPI.Exception.EntityNotFoundException;
+import com.springboot.ShipperAPI.Entity.Shipper;
 import com.springboot.TransporterAPI.Constants.CommonConstants;
 import com.springboot.TransporterAPI.Dao.TransporterDao;
 import com.springboot.TransporterAPI.Entity.Transporter;
@@ -33,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TransporterServiceImpl implements TransporterService {
 
-
+	Logger log = org.slf4j.LoggerFactory.getLogger(TransporterServiceImpl.class);
 	@Autowired
 	private TransporterDao transporterdao;
 
@@ -59,6 +57,7 @@ public class TransporterServiceImpl implements TransporterService {
 			response.setAccountVerificationInProgress(t.get().isAccountVerificationInProgress());
 			response.setMessage(CommonConstants.accountExist);
 			response.setTimestamp(t.get().getTimestamp());
+			response.setEmailId(t.get().getEmailId());
 			return response;
 		}
 
@@ -92,6 +91,12 @@ public class TransporterServiceImpl implements TransporterService {
 		if(StringUtils.isNotBlank(temp)) {
 			transporter.setKyc(temp.trim());
 			response.setKyc(temp.trim());
+		}
+		
+		temp=postTransporter.getEmailId();
+		if(StringUtils.isNotBlank(temp)) {
+			transporter.setEmailId(temp);
+			response.setEmailId(temp);
 		}
 
 		transporter.setTransporterApproved(false);
@@ -128,7 +133,7 @@ public class TransporterServiceImpl implements TransporterService {
 
 	@Transactional(readOnly = true, rollbackFor = Exception.class)
 	@Override
-	public List<Transporter> getTransporters(Boolean transporterApproved, Boolean companyApproved, String phoneNo, Integer pageNo){
+	public List<Transporter> getTransporters(Boolean transporterApproved, Boolean companyApproved, String phoneNo, Integer pageNo ,String emailId){
 		log.info("getTransporters service is started");
 		List<Transporter> list = null;
 		if(pageNo == null) {
@@ -169,6 +174,24 @@ public class TransporterServiceImpl implements TransporterService {
 			else {
 				//throw new MethodArgumentNotValidException(null, null);
 				throw new BusinessException("Invalid mobile number");
+			}
+			
+		}
+		if(emailId != null){
+			String validate = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
+			Pattern pattern = Pattern.compile(validate);
+			Matcher m = pattern.matcher(emailId);
+			if(m.matches()){
+				if(transporterdao.findByEmailId(emailId).isPresent()) {
+					list = List.of(transporterdao.findByEmailId(emailId).get());
+					return list;
+				}
+				else {
+					throw new EntityNotFoundException(Transporter.class, "emailId", emailId.toString());
+				}
+			}
+			else{
+				throw new BusinessException("Invalid email Id");
 			}
 		}
 
@@ -211,6 +234,11 @@ public class TransporterServiceImpl implements TransporterService {
 		if (StringUtils.isNotBlank(temp)) {
 			transporter.setCompanyName(temp.trim());
 		}
+		
+		temp=updateTransporter.getEmailId();
+		if (StringUtils.isNotBlank(temp)) {
+			transporter.setEmailId(temp);
+		}
 
 		if (updateTransporter.getKyc() != null) {
 			transporter.setKyc(updateTransporter.getKyc());
@@ -236,6 +264,7 @@ public class TransporterServiceImpl implements TransporterService {
 		updateResponse.setTransporterName(transporter.getTransporterName());
 		updateResponse.setTransporterLocation(transporter.getTransporterLocation());
 		updateResponse.setCompanyName(transporter.getCompanyName());
+		updateResponse.setEmailId(transporter.getEmailId());
 		updateResponse.setKyc(transporter.getKyc());
 		updateResponse.setTransporterApproved(transporter.isTransporterApproved());
 		updateResponse.setCompanyApproved(transporter.isCompanyApproved());
