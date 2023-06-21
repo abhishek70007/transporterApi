@@ -4,12 +4,14 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import com.springboot.ShipperAPI.Service.ShipperServiceImpl;
 import com.springboot.TransporterAPI.Entity.Transporter;
 import com.springboot.TransporterAPI.Exception.EntityNotFoundException;
 import com.springboot.TransporterAPI.Model.PostTransporter;
@@ -22,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 @RestController
 public class TransporterController {
-
+	Logger log = org.slf4j.LoggerFactory.getLogger(TransporterController.class);
 	@Autowired
 	private TransporterService service;
 
@@ -43,9 +45,10 @@ public class TransporterController {
 			@RequestParam(required = false) Boolean transporterApproved,
 			@RequestParam(required = false) Boolean companyApproved,
 			@RequestParam(required = false) String phoneNo,
-			@RequestParam(required = false) Integer pageNo){
+			@RequestParam(required = false) Integer pageNo,
+			@RequestParam(required = false) String emailId){
 		log.info("Get with Params Controller Started");
-		return new ResponseEntity<>(service.getTransporters(transporterApproved, companyApproved, phoneNo, pageNo),HttpStatus.OK);
+		return new ResponseEntity<>(service.getTransporters(transporterApproved, companyApproved, phoneNo, pageNo,emailId),HttpStatus.OK);
 	}
 
 	@GetMapping("/transporter/{transporterId}")
