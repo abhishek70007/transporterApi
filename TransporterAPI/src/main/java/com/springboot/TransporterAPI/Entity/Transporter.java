@@ -34,6 +34,7 @@ public class Transporter {
 	private String transporterLocation;
 	private String kyc;
 	private boolean companyApproved;
+	private String emailId;
 
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean transporterApproved;
@@ -43,4 +44,92 @@ public class Transporter {
 	
 	@CreationTimestamp
 	public Timestamp timestamp;
+
+	public String getTransporterId() {
+		return transporterId;
+	}
+
+	public void setTransporterId(String transporterId) {
+		this.transporterId = transporterId;
+	}
+
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+
+	public String getTransporterName() {
+		return transporterName;
+	}
+
+	public void setTransporterName(String transporterName) {
+		this.transporterName = transporterName;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getTransporterLocation() {
+		return transporterLocation;
+	}
+
+	public void setTransporterLocation(String transporterLocation) {
+		this.transporterLocation = transporterLocation;
+	}
+
+	public String getKyc() {
+		return kyc;
+	}
+
+	public void setKyc(String kyc) {
+		this.kyc = kyc;
+	}
+
+	public boolean isCompanyApproved() {
+		return companyApproved;
+	}
+
+	public void setCompanyApproved(boolean companyApproved) {
+		this.companyApproved = companyApproved;
+	}
+
+	public boolean isTransporterApproved() {
+		return transporterApproved;
+	}
+
+	public void setTransporterApproved(boolean transporterApproved) {
+		this.transporterApproved = transporterApproved;
+	}
+
+	public boolean isAccountVerificationInProgress() {
+		return accountVerificationInProgress;
+	}
+
+	public void setAccountVerificationInProgress(boolean accountVerificationInProgress) {
+		this.accountVerificationInProgress = accountVerificationInProgress;
+	}
+
+	public Timestamp getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
 }
