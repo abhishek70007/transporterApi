@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.springboot.ShipperAPI.Entity.Shipper;
 import com.springboot.TransporterAPI.Entity.Transporter;
 
 @Repository
@@ -17,6 +18,9 @@ public interface TransporterDao extends JpaRepository<Transporter, String>  {
 
 	@Query("select t from Transporter t where t.phoneNo = :phoneNo")
 	public Optional<Transporter> findByPhoneNo(String phoneNo);
+	
+	@Query("select t from Transporter t where t.emailId = :emailId")
+	public Optional<Transporter> findByEmailId(String emailId);
 
 	@Query("select t from Transporter t where t.transporterApproved = :transporterApproved")
 	public List<Transporter> findByTransporterApproved(Boolean transporterApproved, Pageable pageable);
